@@ -17,7 +17,7 @@ for file in `find ${registry_path} -name "data" -type f`; do
 	if [ 'X'${filesha256} != 'X'${filepathsha} ]; then
 		echo
 		echo "=================================================================="
-		echo "[ERROR] Hash missmatch for: ${filepath}"
+		echo "[ERROR] Hash mismatch for: ${filepath}"
 		echo "[ERROR] Original value: ${filepathsha}"
 		echo "[ERROR] Computed value: ${filesha256}"
 		echo
@@ -33,7 +33,7 @@ for file in `find ${registry_path} -name "data" -type f`; do
 		echo "Manifests affected:"
 		echo
 		for manifest in `find ${registry_path} -name ${filepathsha} -path "*_layers*" | sed -E 's/(.*)\/repositories\/(.*)/\2/g' | awk -F'/' '{print $1}'`; do
-			echo "Recurse search in repo ${manifest}"
+			echo "Recurse search manifests in repo ${manifest}"
 			echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 			for mtags in `find ${registry_path} -name "link" -path "*${manifest}/_manifests/tags*" -path "*tags*/current*"`; do
 				hashid=`cat ${mtags} | awk -F':' '{print $2}'`
