@@ -12,7 +12,8 @@ This message says about filesystem problem, for ex: you pull image to registry a
 I'm not found any method for find and cleanup broken hashes from volume.
 This script checks all hashes in docker filesystem structure.
 If hash of file is wrong - you see error message
-This is error message for broken manifest:
+
+This is an error message for broken manifest:
 ```
 # /registry/consistency.sh
 ...................................
@@ -34,7 +35,9 @@ Layers affected:
 Manifests affected:
 ==================================================================
 ```
-This is error message for broken layer:
+
+This is an error message for broken layer:
+
 ```
 # /registry/consistency.sh 
 .....................
