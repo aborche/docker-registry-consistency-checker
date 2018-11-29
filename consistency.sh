@@ -1,4 +1,11 @@
 #!/bin/sh
+###################################################################
+# Script Name    : consistency.sh
+# Description    : Docker registry filesystem consistency checker
+# Args           :
+# Author         : Aborche
+# Email          : <zhecka@gmail.com>
+###################################################################
 
 #set -x
 registry_path="/registry"
@@ -7,7 +14,7 @@ counter=0
 brokenhashdirs="${registry_path}/broken_hashdirs"
 brokenhashes="${registry_path}/broken_hashes"
 removefiles=""
-#removefiles="--remove-files"
+# removefiles="--remove-files"
 brokenhashdirs_archive="${brokenhashdirs}.tar"
 manifestfiles="${registry_path}/manifest_files.txt"
 curdate=`date "+%Y%m%d-%H%M"`
@@ -109,6 +116,20 @@ for file in `find ${registry_path} -name "data" -type f`; do
 		echo "------------------------------------------------------------------"
 		echo "Manifests affected:"
 		echo
+
+		for file in `cat ${manifestfiles}`; do
+			found=`grep -c ${filepathsha} $file`
+			if [ "X${found}" != "X0" ]; then
+				echo "Found ${found} broken hashes in manifest ${file}"
+				manifesthash=`echo ${file} | awk -F'/' '{print $(NF-1)}'`
+					for tag in `find ${registry_path} -name ${manifesthash} -path "*/_manifests/tags/*"`; do
+						cuttag=`echo ${tag} | sed -E 's/(.*)\/repositories\/(.*)/\2/g'`
+						echo "Manifest ${manifesthash} used in:" $(echo ${cuttag} | awk -F'/' '{print $1":"$4}')
+						echo
+					done
+			fi
+		done
+
 		for image in `find ${registry_path} -name ${filepathsha} -path "*_layers*" | sed -E 's/(.*)\/repositories\/(.*)/\2/g' | awk -F'/' '{print $1}'`; do
 			echo "Recurse search in image ${image}"
 			echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
