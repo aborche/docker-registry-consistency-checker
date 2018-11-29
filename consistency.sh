@@ -101,7 +101,7 @@ for file in `find ${registry_path} -name "data" -type f`; do
 	if [ 'X'${filesha256} != 'X'${filepathsha} ]; then
 		echo
 		echo "=================================================================="
-		echo "[ERROR] Hash missmatch for: ${filepath}"
+		echo "[ERROR] Hash mismatch for: ${filepath}"
 		echo "[ERROR] Original value: ${filepathsha}"
 		echo "[ERROR] Computed value: ${filesha256}"
 		echo
